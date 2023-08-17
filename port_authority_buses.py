@@ -57,6 +57,8 @@ def find_buses_from_port_authority(data: GtfsData) -> pd.DataFrame:
     # Retain only the columns trip_id, departure_time
     port_authority_stop_times = port_authority_stop_times[["trip_id", "departure_time"]]
     # Merge with trips to get route_id and trip_headsign
+
+    # FIXME: Make sure the direction is correct (depart from port authority)
     port_authority_stop_times = port_authority_stop_times.merge(
         data.trips[["trip_id", "route_id", "trip_headsign"]], on="trip_id"
     )
@@ -72,3 +74,6 @@ def find_buses_from_port_authority(data: GtfsData) -> pd.DataFrame:
     port_authority_stop_times = port_authority_stop_times.reset_index(drop=True)
 
     return port_authority_stop_times
+
+
+def main():
