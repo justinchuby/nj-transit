@@ -1,7 +1,15 @@
+"""Find all buses that depart from Port Authority Bus Terminal.
+
+Usage:
+
+    python3 port_authority_buses.py --data bus_data.zip
+"""
+
 import dataclasses
 
 import pandas as pd
 import zipfile
+import argparse
 
 PORT_AUTHORITY_STOP_NAME = "PORT AUTHORITY BUS TERMINAL"
 
@@ -68,7 +76,24 @@ def find_buses_from_port_authority(data: GtfsData) -> pd.DataFrame:
     port_authority_stop_times = port_authority_stop_times.sort_values(
         ["route_id", "departure_time"]
     )
+    # Update the route_short_name to include the letter variant from the trip_headsign
+    port_authority_stop_times["route_short_name"] = (
+        port_authority_stop_times["trip_headsign"].str.split(n=1).str[0]
+    )
     # Reset the index
     port_authority_stop_times = port_authority_stop_times.reset_index(drop=True)
 
     return port_authority_stop_times
+
+
+def main(args):
+    data = read_gtfs_file(args.data)
+    port_authority_stop_times = find_buses_from_port_authority(data)
+    with open("port_authority_buses.csv", "w", encoding="utf-8") as f:
+        port_authority_stop_times.to_csv(f, index=False)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data", help="Path to GTFS file")
+    main(parser.parse_args())
