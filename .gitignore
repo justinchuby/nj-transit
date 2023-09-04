@@ -160,4 +160,3 @@ cython_debug/
 #.idea/
 .DS_Store
 bus_data.zip
-port_authority_buses.csv

@@ -95,8 +95,9 @@ def find_buses_from_port_authority(data: GtfsData) -> pd.DataFrame:
 def main(args):
     data = read_gtfs_file(args.data)
     port_authority_stop_times = find_buses_from_port_authority(data)
-    with open("port_authority_buses.csv", "w", encoding="utf-8") as f:
-        port_authority_stop_times.to_csv(f, index=False)
+    # Save to a json file
+    with open("port_authority_buses.json", "w", encoding="utf-8") as f:
+        f.write(port_authority_stop_times.to_json(orient="records"))
 
 
 if __name__ == "__main__":
