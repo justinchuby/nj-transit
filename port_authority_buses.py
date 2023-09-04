@@ -80,6 +80,12 @@ def find_buses_from_port_authority(data: GtfsData) -> pd.DataFrame:
     port_authority_stop_times["route_short_name"] = (
         port_authority_stop_times["trip_headsign"].str.split(n=1).str[0]
     )
+    # Remove "-Exact Fare" from trip_headsign
+    port_authority_stop_times["trip_headsign"] = (
+        port_authority_stop_times["trip_headsign"]
+        .str.replace("-Exact Fare", "")
+        .str.strip()
+    )
     # Reset the index
     port_authority_stop_times = port_authority_stop_times.reset_index(drop=True)
 
